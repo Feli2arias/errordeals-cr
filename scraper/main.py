@@ -17,6 +17,7 @@ from config import get_settings
 from db import get_client
 from detector import detect_anomaly
 from models import Product
+from logger import log_run, get_consecutive_failures
 from publisher import publish_alert, resolve_alert
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
@@ -92,10 +93,19 @@ async def process_store(adapter) -> None:
             except Exception as e:
                 logger.error(f"Error procesando {product.url}: {e}")
 
+        log_run(adapter.store_id, "success", len(products))
         logger.info(f"[{adapter.store_id}] {len(products)} productos procesados")
 
     except Exception as e:
         logger.error(f"[{adapter.store_id}] Scraping fallido: {e}")
+        log_run(adapter.store_id, "error", 0, str(e))
+
+        failures = get_consecutive_failures(adapter.store_id)
+        if failures >= 3:
+            logger.critical(
+                f"[{adapter.store_id}] ALERTA: {failures} fallos consecutivos. "
+                f"Revisar si la tienda cambió su HTML o está bloqueando el scraper."
+            )
 
 
 async def main() -> None:
