@@ -1,0 +1,45 @@
+stores:
+  - id: walmart
+    name: "Walmart CR"
+    base_url: "https://www.walmart.co.cr"
+    category_urls:
+      - "https://www.walmart.co.cr/electronica"
+      - "https://www.walmart.co.cr/electrodomesticos"
+      - "https://www.walmart.co.cr/computacion"
+    selectors:
+      product_container: "[data-testid='product-card']"
+      name: "[data-testid='product-title']"
+      price: "[data-testid='price-current']"
+      image: "img.product-image"
+      link: "a[data-testid='product-link']"
+    enabled: true
+
+  - id: gollo
+    name: "Gollo"
+    base_url: "https://www.gollo.co.cr"
+    category_urls:
+      - "https://www.gollo.co.cr/television"
+      - "https://www.gollo.co.cr/refrigeradores"
+      - "https://www.gollo.co.cr/computadoras"
+    selectors:
+      product_container: ".product-item"
+      name: ".product-item-name"
+      price: ".price"
+      image: ".product-image-photo"
+      link: "a.product-item-link"
+    enabled: true
+
+  - id: monge
+    name: "Monge"
+    base_url: "https://www.monge.co.cr"
+    category_urls:
+      - "https://www.monge.co.cr/television"
+      - "https://www.monge.co.cr/lavadoras"
+      - "https://www.monge.co.cr/celulares"
+    selectors:
+      product_container: ".product-card"
+      name: ".product-name"
+      price: ".product-price"
+      image: ".product-img img"
+      link: "a.product-link"
+    enabled: true
