@@ -40,11 +40,11 @@ def upsert_product(client, product: Product) -> str:
     return result.data[0]["id"]
 
 
-def save_snapshot(client, product_id: str, price: float) -> None:
-    client.table("price_snapshots").insert({
-        "product_id": product_id,
-        "price": price,
-    }).execute()
+def save_snapshot(client, product_id: str, price: float, original_price: float | None = None) -> None:
+    data: dict = {"product_id": product_id, "price": price}
+    if original_price is not None:
+        data["original_price"] = original_price
+    client.table("price_snapshots").insert(data).execute()
 
 
 def get_recent_snapshots(client, product_id: str, days: int) -> list[float]:
@@ -78,7 +78,7 @@ async def process_store(adapter) -> None:
         for product in products:
             try:
                 product_id = upsert_product(client, product)
-                save_snapshot(client, product_id, product.price)
+                save_snapshot(client, product_id, product.price, product.original_price)
 
                 snapshots = get_recent_snapshots(client, product_id, history_days)
                 historical = snapshots[1:] if len(snapshots) > 1 else []

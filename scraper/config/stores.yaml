@@ -9,7 +9,8 @@ stores:
     selectors:
       product_container: ".vtex-search-result-3-x-galleryItem"
       name: ".custom-product-name"
-      price: "[class*='priceContainer']"
+      price: "[class*='sellingPriceValue']"
+      original_price: "[class*='listPriceValue']"
       image: "img"
       link: "a[href]"
     enabled: true
@@ -25,6 +26,7 @@ stores:
       product_container: ".product-item"
       name: "a.product-item-link"
       price: ".special-price .price"
+      original_price: ".old-price .price"
       image: "img"
       link: "a.product-item-link"
     enabled: true
@@ -40,6 +42,7 @@ stores:
       product_container: ".product-item"
       name: "strong.product-item-name"
       price: ".special-price .price"
+      original_price: ".old-price .price"
       image: "img"
       link: "a.product-item-link"
     enabled: true

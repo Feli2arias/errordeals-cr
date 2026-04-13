@@ -40,6 +40,15 @@ class GolloAdapter(BaseAdapter):
             except ValueError:
                 continue
 
+            original_price = None
+            orig_el = card.select_one(cfg.get("original_price", ""))
+            if orig_el:
+                orig_raw = re.sub(r"[^\d]", "", orig_el.get_text())
+                try:
+                    original_price = float(orig_raw) if orig_raw else None
+                except ValueError:
+                    pass
+
             href = link_el.get("href", "")
             url = href if href.startswith("http") else base_url.rstrip("/") + href
 
@@ -49,6 +58,7 @@ class GolloAdapter(BaseAdapter):
                 url=url,
                 price=price,
                 image_url=img_el.get("src") or img_el.get("data-src") if img_el else None,
+                original_price=original_price,
             ))
 
         return products
