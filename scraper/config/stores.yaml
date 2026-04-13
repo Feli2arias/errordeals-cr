@@ -7,39 +7,39 @@ stores:
       - "https://www.walmart.co.cr/electrodomesticos"
       - "https://www.walmart.co.cr/computacion"
     selectors:
-      product_container: "[data-testid='product-card']"
-      name: "[data-testid='product-title']"
-      price: "[data-testid='price-current']"
-      image: "img.product-image"
-      link: "a[data-testid='product-link']"
+      product_container: ".vtex-search-result-3-x-galleryItem"
+      name: ".custom-product-name"
+      price: "[class*='priceContainer']"
+      image: "img"
+      link: "a[href]"
     enabled: true
 
   - id: gollo
     name: "Gollo"
-    base_url: "https://www.gollo.co.cr"
+    base_url: "https://www.gollo.com"
     category_urls:
-      - "https://www.gollo.co.cr/television"
-      - "https://www.gollo.co.cr/refrigeradores"
-      - "https://www.gollo.co.cr/computadoras"
+      - "https://www.gollo.com/c/tecnologia/tv-y-video/pantallas"
+      - "https://www.gollo.com/c/eletrodomesticos/refrigeracion"
+      - "https://www.gollo.com/c/tecnologia/computadoras"
     selectors:
       product_container: ".product-item"
-      name: ".product-item-name"
-      price: ".price"
-      image: ".product-image-photo"
+      name: "a.product-item-link"
+      price: ".special-price .price"
+      image: "img"
       link: "a.product-item-link"
     enabled: true
 
   - id: monge
-    name: "Monge"
-    base_url: "https://www.monge.co.cr"
+    name: "Tienda Monge"
+    base_url: "https://www.tiendamonge.com"
     category_urls:
-      - "https://www.monge.co.cr/television"
-      - "https://www.monge.co.cr/lavadoras"
-      - "https://www.monge.co.cr/celulares"
+      - "https://www.tiendamonge.com/productos/electrodomesticos"
+      - "https://www.tiendamonge.com/productos/celulares-y-tablets/celulares"
+      - "https://www.tiendamonge.com/productos/television"
     selectors:
-      product_container: ".product-card"
-      name: ".product-name"
-      price: ".product-price"
-      image: ".product-img img"
-      link: "a.product-link"
+      product_container: ".product-item"
+      name: "strong.product-item-name"
+      price: ".special-price .price"
+      image: "img"
+      link: "a.product-item-link"
     enabled: true
