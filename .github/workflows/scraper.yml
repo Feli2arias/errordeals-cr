@@ -1,0 +1,46 @@
+name: Scraper ErrorDeals CR
+
+on:
+  schedule:
+    # Cada 10 minutos
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+    # Permite correr manualmente desde la pestaña Actions para debugging
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: scraper/requirements.txt
+
+      - name: Instalar dependencias Python
+        run: pip install -r scraper/requirements.txt
+
+      - name: Instalar Playwright Chromium
+        run: playwright install chromium --with-deps
+
+      - name: Correr scraper
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+        run: |
+          cd scraper
+          python main.py
+
+      - name: Upload logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: scraper-logs-${{ github.run_id }}
+          path: scraper/*.log
+          retention-days: 7
