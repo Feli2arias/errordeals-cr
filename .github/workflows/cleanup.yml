@@ -1,0 +1,43 @@
+name: Cleanup snapshots antiguos
+
+on:
+  schedule:
+    # Primer día de cada mes a las 3 AM UTC
+    - cron: '0 3 1 * *'
+  workflow_dispatch:
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: scraper/requirements.txt
+
+      - name: Instalar dependencias
+        run: pip install -r scraper/requirements.txt
+
+      - name: Purgar snapshots > 90 días y logs > 30 días
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+        run: |
+          python - <<'EOF'
+          import os
+          from datetime import datetime, timedelta
+          from supabase import create_client
+
+          client = create_client(os.environ["SUPABASE_URL"], os.environ["SUPABASE_SERVICE_KEY"])
+
+          cutoff_snapshots = (datetime.utcnow() - timedelta(days=90)).isoformat()
+          client.table("price_snapshots").delete().lt("scraped_at", cutoff_snapshots).execute()
+          print(f"Snapshots anteriores a {cutoff_snapshots} eliminados")
+
+          cutoff_logs = (datetime.utcnow() - timedelta(days=30)).isoformat()
+          client.table("scraper_logs").delete().lt("ran_at", cutoff_logs).execute()
+          print(f"Logs del scraper anteriores a {cutoff_logs} eliminados")
+          EOF
