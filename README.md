@@ -110,3 +110,7 @@ errordeals-cr/
 ## Estado del proyecto
 
 MVP funcional: scraper, detección, dashboard y automatización con GitHub Actions están implementados y cubiertos por tests. El proyecto depende de los selectores HTML de cada tienda, por lo que un rediseño de sus sitios puede requerir actualizar `stores.yaml`.
+
+## Licencia
+
+[MIT](LICENSE)
